@@ -389,7 +389,5 @@ public class MapHandler {
   private void close(Statement myStmt, ResultSet myRs) throws SQLException {
     close(null, myStmt, myRs);
   }
-
-
 }
 
