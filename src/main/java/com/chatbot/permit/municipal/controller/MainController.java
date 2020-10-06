@@ -43,9 +43,9 @@ public class MainController {
 		ArrayList<Object> locations = (ArrayList<Object>) topResult.get("locations");
 		    addressInfo = (LinkedHashMap) locations.get(0);
 	} catch (Exception exe) {
-	    throw new ResponseStatusException(
-	            HttpStatus.NOT_FOUND, "Failed to Retrieve Address Information"
-	    );
+		exe.printStackTrace();
+	    polygonZoneID.put("polygonZoneID", -1);
+	    return polygonZoneID;
 	}
 		
 	/**
@@ -55,21 +55,19 @@ public class MainController {
 	 */
 	geocodeQualityCode = (String) addressInfo.get("geocodeQualityCode");
 	if (!geocodeQualityCode.substring(2).equals("AAA")) {
-	throw new ResponseStatusException(
-	        HttpStatus.NOT_FOUND, "Invalid address"
-	    );
+	    polygonZoneID.put("polygonZoneID", -1);
+	    return polygonZoneID;
 	}
 	
 	latLng = (LinkedHashMap) addressInfo.get("latLng");
 	// Use MapPoint class to find zone for user's lat and long
 	try {
 	    int id = startApp.findZones((Double) latLng.get("lng"), (Double) latLng.get("lat"));
-	polygonZoneID.put("polygonZoneID", id);
+	    polygonZoneID.put("polygonZoneID", id);
 	} catch(Exception exc) {
 		exc.printStackTrace();
-	    throw new ResponseStatusException(
-	            HttpStatus.NOT_FOUND, "Failed to retrieve zone"
-	    );
+	    polygonZoneID.put("polygonZoneID", -1);
+	    return polygonZoneID;
 	}
 	
 	return polygonZoneID;
