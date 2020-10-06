@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import com.chatbot.permit.municipal.zones.MapPoint;
+
+import com.chatbot.permit.municipal.zones.MapHandler;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -17,9 +18,9 @@ import java.util.List;
 
 @RestController
 public class MainController {
-    private static final String JSON_GEOCODE = "http://www.mapquestapi.com/geocoding/v1/address?key=" +
+    private static final String JSON_GEOCODE = "http://www.mapquestapi.com/geocoding/v1/address?key=T1ZkrYupo29GADqqVLhtmYdyQfQyZNAk" +
             "&location=";
-    MapPoint startApp = new MapPoint();
+    MapHandler startApp = new MapHandler();
 
     @Autowired
     private ParsingService parsingService;
@@ -30,6 +31,7 @@ public class MainController {
         String mapquestUrl = JSON_GEOCODE + userLocation.getLocation();
         LinkedHashMap addressInfo;
         String geocodeQualityCode;
+        LinkedHashMap<String, Integer> polygonZoneID = new LinkedHashMap<String, Integer>();
 
         try {
             // send request for lat and long values from mapquest api
@@ -60,16 +62,16 @@ public class MainController {
 
         latLng = (LinkedHashMap) addressInfo.get("latLng");
         // Use MapPoint class to find zone for user's lat and long
-        LinkedHashMap zoneCode = new LinkedHashMap<String, String>();
         try {
-            List<String> zones = startApp.findZones((Double) latLng.get("lng"), (Double) latLng.get("lat"));
-            zoneCode.put("zone", zones.get(0));
+            int id = startApp.findZones((Double) latLng.get("lng"), (Double) latLng.get("lat"));
+            polygonZoneID.put("polygonZoneID", id);
         } catch(Exception exc) {
+        	exc.printStackTrace();
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Failed to retrieve zone"
             );
         }
 
-        return zoneCode;
+        return polygonZoneID;
     }
 }

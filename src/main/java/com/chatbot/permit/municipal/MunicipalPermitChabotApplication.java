@@ -16,10 +16,6 @@ public class MunicipalPermitChabotApplication {
 	
 	public static void main(String[] args) {
 		ConfigurableApplicationContext context = SpringApplication.run(MunicipalPermitChabotApplication.class, args);
-		
-		
-		
-		
 	}
 
 }
