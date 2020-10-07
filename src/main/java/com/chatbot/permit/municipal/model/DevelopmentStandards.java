@@ -1,4 +1,4 @@
-package model;
+package com.chatbot.permit.municipal.model;
 
 import javax.persistence.*;
 

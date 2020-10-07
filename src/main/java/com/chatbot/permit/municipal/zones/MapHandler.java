@@ -4,24 +4,20 @@
  */
 package com.chatbot.permit.municipal.zones;
 
-import java.awt.Polygon;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.swing.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.FileInputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import javax.swing.JFileChooser;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.Element;
 
 
 
@@ -30,24 +26,9 @@ import org.w3c.dom.Element;
  * @author bmurray
  */
 public class MapHandler {
-  private Connection myConn;
   private static List<ZonePolygon> mapZones;
 
-
-
   public MapHandler() {
-	try {
-		String dbName = "chatbot";
-		String dbUser = "root";
-		String dbPwd = "";
-		String dbURL = "";
-		
-		myConn = DriverManager.getConnection(dbURL, dbUser, dbPwd);
-		mapZones = this.convertAllZonesToPolygon();
-		System.out.println(mapZones.size());
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
 	// this.parseKML(); //uncomment this to import file on start
   }
 

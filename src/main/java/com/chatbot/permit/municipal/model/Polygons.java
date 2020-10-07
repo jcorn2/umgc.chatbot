@@ -1,4 +1,4 @@
-package model;
+package com.chatbot.permit.municipal.model;
 
 import javax.persistence.*;
 
@@ -12,6 +12,14 @@ public class Polygons {
     private String ZONE_CODE_3;
     private String ZONE_NOTE;
 
+    public Polygons(int POLYGON_ID, String ZONE_CODE, String ZONE_CODE_2, String ZONE_CODE_3, String ZONE_NOTE) {
+        this.setPOLYGON_ID(POLYGON_ID);
+        this.setZONE_CODE(ZONE_CODE);
+        this.setZONE_CODE_2(ZONE_CODE_2);
+        this.setZONE_CODE_3(ZONE_CODE_3);
+        this.setZONE_NOTE(ZONE_NOTE);
+    }
+    
     public int getPOLYGON_ID() {
         return POLYGON_ID;
     }

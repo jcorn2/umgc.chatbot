@@ -1,23 +1,22 @@
-package model;
+package com.chatbot.permit.municipal.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "zone")
-public class Zone {
+@Table(name = "zone_land_use")
+public class ZoneLandUse {
     @Id
-    private String zone_symbol;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
     private int city_id;
     private String description;
 
-    public String getZone_symbol() {
-        return zone_symbol;
+    public int getId() {
+        return id;
     }
 
-    public void setZone_symbol(String zone_symbol) {
-        this.zone_symbol = zone_symbol;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getCity_id() {
