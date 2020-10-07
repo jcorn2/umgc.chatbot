@@ -38,9 +38,9 @@ public class MapHandler {
   public MapHandler() {
 	try {
 		String dbName = "chatbot";
-		String dbUser = "test";
-		String dbPwd = "password";
-		String dbURL = "jdbc:mysql://localhost:3306/chatbot?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=GMT";
+		String dbUser = "root";
+		String dbPwd = "";
+		String dbURL = "";
 		
 		myConn = DriverManager.getConnection(dbURL, dbUser, dbPwd);
 		mapZones = this.convertAllZonesToPolygon();
