@@ -1,26 +1,30 @@
 package com.chatbot.permit.municipal.controller;
 
 import com.chatbot.permit.municipal.domain.Location;
+import com.chatbot.permit.municipal.repository.MapsRepository;
+import com.chatbot.permit.municipal.repository.PolygonsRepository;
 import com.chatbot.permit.municipal.service.ParsingService;
+import com.chatbot.permit.municipal.zones.MapHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
-
-import com.chatbot.permit.municipal.zones.MapHandler;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 @RestController
 public class MainController {
-    private MapHandler startApp = new MapHandler();
+	
+
+	@Autowired
+	PolygonsRepository polygonsRepository;
+	@Autowired
+	MapsRepository mapsRepository;
+  
     private static final String JSON_GEOCODE =
-    		"http://www.mapquestapi.com/geocoding/v1/address?key=" + "&location=";
+    		"http://www.mapquestapi.com/geocoding/v1/address?key=iVGbFk4yd417GWcFMw3NdsaQ5jQP27fv" + "&location=";
 
   @Autowired
   private ParsingService parsingService;
@@ -28,6 +32,8 @@ public class MainController {
   @RequestMapping(value = "/geocode", method = RequestMethod.POST, consumes = "application/json",
       produces = "application/json")
   public LinkedHashMap main(@RequestBody Location userLocation) throws Exception {
+	// repositories are not initialize outside of @RequestMapping so declare MapHandler instance here
+	MapHandler startApp = new MapHandler(polygonsRepository, mapsRepository);
     LinkedHashMap latLng;
     String mapquestUrl = JSON_GEOCODE + userLocation.getLocation();
     LinkedHashMap addressInfo;

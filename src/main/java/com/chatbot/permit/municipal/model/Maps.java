@@ -7,15 +7,19 @@ import javax.persistence.*;
 public class Maps {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID")
     private int ID;
-    private int FK_POLYGON_ID;
+    @Column(name = "FK_POLYGON_ID")
+    private int FKPOLYGONID;
     private double LAT;
     private double LON;
     int LAT_CORD;
     int LON_CORD;
 
+    public Maps() {}
+    
     public Maps(int FK_POLYGON_ID, double LAT, double LON, int LAT_CORD, int LON_CORD) {
-        this.setFK_POLYGON_ID(FK_POLYGON_ID);
+        this.setFKPOLYGONID(FK_POLYGON_ID);
         this.setLAT(LAT);
         this.setLON(LON);
         this.setLAT_CORD(LAT_CORD);
@@ -30,12 +34,12 @@ public class Maps {
         this.ID = ID;
     }
 
-    public int getFK_POLYGON_ID() {
-        return FK_POLYGON_ID;
+    public int getFKPOLYGONID() {
+        return FKPOLYGONID;
     }
 
-    public void setFK_POLYGON_ID(int FK_POLYGON_ID) {
-        this.FK_POLYGON_ID = FK_POLYGON_ID;
+    public void setFKPOLYGONID(int FKPOLYGONID) {
+        this.FKPOLYGONID = FKPOLYGONID;
     }
 
     public double getLAT() {

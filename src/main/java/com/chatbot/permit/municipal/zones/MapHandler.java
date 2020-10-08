@@ -36,15 +36,31 @@ import java.util.Scanner;
 public class MapHandler {
   private static List<ZonePolygon> mapZones;
 
-  @Autowired
   PolygonsRepository polygonsRepository;
-  @Autowired
   MapsRepository mapsRepository;
 
   public MapHandler() {
+	try {
+		this.mapZones = this.convertAllZonesToPolygon();
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	// this.parseKML(); //uncomment this to import file on start
   }
 
+  public MapHandler(PolygonsRepository polygonsRepository, MapsRepository mapsRepository) {
+	  this.polygonsRepository = polygonsRepository;
+	  this.mapsRepository = mapsRepository;
+	  try {
+		this.mapZones = this.convertAllZonesToPolygon();
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	// this.parseKML(); //uncomment this to import file on start
+  }
+  
   /**
    * This function returns a list of the custom ZonePolygon objects that are in the DB.
    * 
@@ -188,7 +204,7 @@ public class MapHandler {
   public ZonePolygon convertZoneToPolygon(int zoneID) throws SQLException {
 
     ZonePolygon tempZone = new ZonePolygon();
-    List<Maps> maps = mapsRepository.findByFK_POLYGON_ID(zoneID);
+    List<Maps> maps = mapsRepository.findByFKPOLYGONID(zoneID);
     if (maps.size() > 0) {
       tempZone.setZoneID(zoneID);
       for (Maps map : maps) {
@@ -208,9 +224,9 @@ public class MapHandler {
   public List<ZonePolygon> convertAllZonesToPolygon() throws SQLException {
 
     List<ZonePolygon> list = new ArrayList<>();
-    List<Maps> maps = mapsRepository.findMapsDistinctBy();
-    for (Maps map : maps) {
-      ZonePolygon zonePolygon = convertZoneToPolygon(map.getFK_POLYGON_ID());
+    List<Integer> fkPolygonIds = mapsRepository.findMapsDistinctBy();
+    for (int id : fkPolygonIds) {
+      ZonePolygon zonePolygon = convertZoneToPolygon(id);
       list.add(zonePolygon);
     }
 
