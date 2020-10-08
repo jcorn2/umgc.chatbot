@@ -12,6 +12,12 @@ public class Polygons {
     private String ZONE_CODE_3;
     private String ZONE_NOTE;
 
+    public Polygons(int POLYGON_ID, String ZONE_CODE, String ZONE_NOTE) {
+        this.setPOLYGON_ID(POLYGON_ID);
+        this.setZONE_CODE(ZONE_CODE);
+        this.setZONE_NOTE(ZONE_NOTE);
+    }
+
     public Polygons(int POLYGON_ID, String ZONE_CODE, String ZONE_CODE_2, String ZONE_CODE_3, String ZONE_NOTE) {
         this.setPOLYGON_ID(POLYGON_ID);
         this.setZONE_CODE(ZONE_CODE);
