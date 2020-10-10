@@ -24,7 +24,7 @@ public class MainController {
 	MapsRepository mapsRepository;
   
     private static final String JSON_GEOCODE =
-    		"http://www.mapquestapi.com/geocoding/v1/address?key=iVGbFk4yd417GWcFMw3NdsaQ5jQP27fv" + "&location=";
+    		"http://www.mapquestapi.com/geocoding/v1/address?key=" + "&location=";
 
   @Autowired
   private ParsingService parsingService;

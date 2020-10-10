@@ -18,6 +18,13 @@ public class Polygons {
         this.setZONE_NOTE(ZONE_NOTE);
     }
 
+    public Polygons(int POLYGON_ID, String ZONE_CODE, String ZONE_CODE_2, String ZONE_NOTE) {
+        this.setPOLYGON_ID(POLYGON_ID);
+        this.setZONE_CODE(ZONE_CODE);
+        this.setZONE_CODE_2(ZONE_CODE_2);
+        this.setZONE_NOTE(ZONE_NOTE);
+    }
+
     public Polygons(int POLYGON_ID, String ZONE_CODE, String ZONE_CODE_2, String ZONE_CODE_3, String ZONE_NOTE) {
         this.setPOLYGON_ID(POLYGON_ID);
         this.setZONE_CODE(ZONE_CODE);

@@ -5,6 +5,7 @@
 package com.chatbot.permit.municipal;
 
 import com.chatbot.permit.municipal.model.Maps;
+import com.chatbot.permit.municipal.model.Polygons;
 import com.chatbot.permit.municipal.repository.MapsRepository;
 import com.chatbot.permit.municipal.repository.PolygonsRepository;
 import com.chatbot.permit.municipal.zones.MapHandler;
@@ -43,7 +44,7 @@ public class MapHandlerJUnitTest {
   @Before
   public void setUp() {
     MockitoAnnotations.initMocks(this);
-    // mock data
+    // mock data for maps repository
     List<Integer> zoneIds = Arrays.asList(71, 9, 17, 390, 129, 315);
     when(mockMapsRepository.findMapsDistinctBy()).thenReturn(zoneIds);
     when(mockMapsRepository.findByFKPOLYGONID(71)).thenReturn(Arrays.asList(
@@ -76,6 +77,14 @@ public class MapHandlerJUnitTest {
             new Maps(315, -118.149989, 34.179353, -118149989, 34179353),
             new Maps(315, -118.146214, 34.175038, -118146214, 34175038),
             new Maps(315, -118.146991, 34.180579, -118146991, 34180579)));
+
+    // mock data for polygons repository
+    when(mockPolygonsRepository.findById(71)).thenReturn(java.util.Optional.of(new Polygons(71, "OS", "OS")));
+    when(mockPolygonsRepository.findById(9)).thenReturn(java.util.Optional.of(new Polygons(9, "CD-5", "CD-5")));
+    when(mockPolygonsRepository.findById(17)).thenReturn(java.util.Optional.of(new Polygons(17, "CD-1", "AD", "CD-1 AD-1")));
+    when(mockPolygonsRepository.findById(390)).thenReturn(java.util.Optional.of(new Polygons(390, "IG-SP-2-AD-2", "IG-SP-2-AD-2")));
+    when(mockPolygonsRepository.findById(129)).thenReturn(java.util.Optional.of(new Polygons(129, "CD-6", "CD-6")));
+    when(mockPolygonsRepository.findById(315)).thenReturn(java.util.Optional.of(new Polygons(315, "RM-12", "RM-12")));
   }
 
   @After
@@ -103,49 +112,49 @@ public class MapHandlerJUnitTest {
 
   @Test
   public void getZoneCodeForIDTest() throws Exception {
-    assertEquals("OS", new MapHandler().getZoneCodeForID(71));
-    assertEquals("CD-5", new MapHandler().getZoneCodeForID(9));
-    assertEquals("CD-1", new MapHandler().getZoneCodeForID(17));
-    assertEquals("IG-SP-2-AD-2", new MapHandler().getZoneCodeForID(390));
-    assertEquals("CD-6", new MapHandler().getZoneCodeForID(129));
-    assertEquals("RM-12", new MapHandler().getZoneCodeForID(315));
-    assertEquals(null, new MapHandler().getZoneCodeForID(-1));
+    assertEquals("OS", new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneCodeForID(71));
+    assertEquals("CD-5", new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneCodeForID(9));
+    assertEquals("CD-1", new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneCodeForID(17));
+    assertEquals("IG-SP-2-AD-2", new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneCodeForID(390));
+    assertEquals("CD-6", new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneCodeForID(129));
+    assertEquals("RM-12", new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneCodeForID(315));
+    assertEquals(null, new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneCodeForID(-1));
 
   }
 
   @Test
   public void getZoneCode2ForIDTest() throws Exception {
-    assertEquals(null, new MapHandler().getZoneCode2ForID(71));
-    assertEquals(null, new MapHandler().getZoneCode2ForID(9));
-    assertEquals("AD", new MapHandler().getZoneCode2ForID(17));
-    assertEquals(null, new MapHandler().getZoneCode2ForID(390));
-    assertEquals(null, new MapHandler().getZoneCode2ForID(129));
-    assertEquals(null, new MapHandler().getZoneCode2ForID(315));
-    assertEquals(null, new MapHandler().getZoneCode2ForID(-1));
+    assertEquals(null, new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneCode2ForID(71));
+    assertEquals(null, new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneCode2ForID(9));
+    assertEquals("AD", new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneCode2ForID(17));
+    assertEquals(null, new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneCode2ForID(390));
+    assertEquals(null, new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneCode2ForID(129));
+    assertEquals(null, new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneCode2ForID(315));
+    assertEquals(null, new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneCode2ForID(-1));
 
   }
 
   @Test
   public void getZoneCode3ForIDTest() throws Exception {
-    assertEquals(null, new MapHandler().getZoneCode3ForID(71));
-    assertEquals(null, new MapHandler().getZoneCode3ForID(9));
-    assertEquals(null, new MapHandler().getZoneCode3ForID(17));
-    assertEquals(null, new MapHandler().getZoneCode3ForID(390));
-    assertEquals(null, new MapHandler().getZoneCode3ForID(129));
-    assertEquals(null, new MapHandler().getZoneCode3ForID(315));
-    assertEquals(null, new MapHandler().getZoneCode3ForID(-1));
+    assertEquals(null, new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneCode3ForID(71));
+    assertEquals(null, new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneCode3ForID(9));
+    assertEquals(null, new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneCode3ForID(17));
+    assertEquals(null, new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneCode3ForID(390));
+    assertEquals(null, new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneCode3ForID(129));
+    assertEquals(null, new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneCode3ForID(315));
+    assertEquals(null, new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneCode3ForID(-1));
 
   }
 
   @Test
   public void getZoneNoteForIDTest() throws Exception {
-    assertEquals("OS", new MapHandler().getZoneNoteForID(71));
-    assertEquals("CD-5", new MapHandler().getZoneNoteForID(9));
-    assertEquals("CD-1 AD-1", new MapHandler().getZoneNoteForID(17));
-    assertEquals("IG-SP-2-AD-2", new MapHandler().getZoneNoteForID(390));
-    assertEquals("CD-6", new MapHandler().getZoneNoteForID(129));
-    assertEquals("RM-12", new MapHandler().getZoneNoteForID(315));
-    assertEquals(null, new MapHandler().getZoneNoteForID(-1));
+    assertEquals("OS", new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneNoteForID(71));
+    assertEquals("CD-5", new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneNoteForID(9));
+    assertEquals("CD-1 AD-1", new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneNoteForID(17));
+    assertEquals("IG-SP-2-AD-2", new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneNoteForID(390));
+    assertEquals("CD-6", new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneNoteForID(129));
+    assertEquals("RM-12", new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneNoteForID(315));
+    assertEquals(null, new MapHandler(mockPolygonsRepository, mockMapsRepository).getZoneNoteForID(-1));
 
   }
 }
