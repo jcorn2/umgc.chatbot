@@ -61,8 +61,6 @@ class MunicipalPermitChabotApplicationTests {
             new Maps(71, -118.166906, 34.151521, -118166906, 34151521),
             new Maps(71, -118.164063, 34.149659, -118164063, 34149659),
             new Maps(71, -118.163817, 34.164540, -118163817, 34164540)));
-    System.out.println("hello world");
-
     // mock data for polygons repository
     given(mockPolygonsRepository.findById(71)).willReturn(java.util.Optional.of(new Polygons(71, "OS", "OS")));
   }
@@ -73,7 +71,7 @@ class MunicipalPermitChabotApplicationTests {
   }
 
   @Test
-  public void shouldReturnCorrectPolygonID() throws Exception {
+  public void validAddress() throws Exception {
     Object location = new Object() {
       public String location = "360 N Arroyo Blvd, Pasadena, CA 91103";
     };
@@ -95,10 +93,6 @@ class MunicipalPermitChabotApplicationTests {
     LinkedHashMap mapQuestResponse = new LinkedHashMap();
     mapQuestResponse.put("results", results);
 
-    Object expectedValue = new Object() {
-      public int polygonZoneID = 71;
-    };
-
     given(jsonParsingService
             .parse("http://www.mapquestapi.com/geocoding/v1/address?key=&location=360 N Arroyo Blvd, Pasadena, CA 91103"))
             .willReturn(mapQuestResponse);
@@ -110,4 +104,90 @@ class MunicipalPermitChabotApplicationTests {
             .andExpect(content().json("{'polygonZoneID': 71}"));
   }
 
+  @Test
+  public void outOfPasadena() throws Exception {
+    Object location = new Object() {
+      public String location = "1616 McCormick Dr, Largo, MD 20774";
+    };
+    ObjectMapper locationMapper = new ObjectMapper();
+    String locationJson = locationMapper.writeValueAsString(location);
+
+    LinkedHashMap latLon = new LinkedHashMap();
+    latLon.put("lng", -76.846206);
+    latLon.put("lat", 38.912614);
+    LinkedHashMap addressInfo = new LinkedHashMap();
+    addressInfo.put("latLng", latLon);
+    addressInfo.put("geocodeQualityCode", "L1AAA");
+    ArrayList<LinkedHashMap> locations = new ArrayList<LinkedHashMap>();
+    locations.add(addressInfo);
+    LinkedHashMap topResult = new LinkedHashMap();
+    topResult.put("locations", locations);
+    ArrayList<Object> results = new ArrayList<Object>();
+    results.add(topResult);
+    LinkedHashMap mapQuestResponse = new LinkedHashMap();
+    mapQuestResponse.put("results", results);
+
+    given(jsonParsingService
+            .parse("http://www.mapquestapi.com/geocoding/v1/address?key=&location=1616 McCormick Dr, Largo, MD 20774"))
+            .willReturn(mapQuestResponse);
+
+    this.mockMvc.perform(post("/geocode")
+            .content(locationJson)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().json("{'polygonZoneID': -1}"));
+  }
+
+  @Test
+  public void notHighestConfidence() throws Exception {
+    Object location = new Object() {
+      public String location = "360 N Arroyo Blvd, Pasadena, CA 91103";
+    };
+    ObjectMapper locationMapper = new ObjectMapper();
+    String locationJson = locationMapper.writeValueAsString(location);
+
+    LinkedHashMap latLon = new LinkedHashMap();
+    latLon.put("lng", -118.166029);
+    latLon.put("lat", 34.151636);
+    LinkedHashMap addressInfo = new LinkedHashMap();
+    addressInfo.put("latLng", latLon);
+    addressInfo.put("geocodeQualityCode", "L1ABA");
+    ArrayList<LinkedHashMap> locations = new ArrayList<LinkedHashMap>();
+    locations.add(addressInfo);
+    LinkedHashMap topResult = new LinkedHashMap();
+    topResult.put("locations", locations);
+    ArrayList<Object> results = new ArrayList<Object>();
+    results.add(topResult);
+    LinkedHashMap mapQuestResponse = new LinkedHashMap();
+    mapQuestResponse.put("results", results);
+
+    given(jsonParsingService
+            .parse("http://www.mapquestapi.com/geocoding/v1/address?key=&location=360 N Arroyo Blvd, Pasadena, CA 91103"))
+            .willReturn(mapQuestResponse);
+
+    this.mockMvc.perform(post("/geocode")
+            .content(locationJson)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().json("{'polygonZoneID': -1}"));
+  }
+
+  @Test
+  public void noMapQuestResponse() throws Exception {
+    Object location = new Object() {
+      public String location = "360 N Arroyo Blvd, Pasadena, CA 91103";
+    };
+    ObjectMapper locationMapper = new ObjectMapper();
+    String locationJson = locationMapper.writeValueAsString(location);
+
+    given(jsonParsingService
+            .parse("http://www.mapquestapi.com/geocoding/v1/address?key=&location=360 N Arroyo Blvd, Pasadena, CA 91103"))
+            .willReturn(null);
+
+    this.mockMvc.perform(post("/geocode")
+            .content(locationJson)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().json("{'polygonZoneID': -1}"));
+  }
 }

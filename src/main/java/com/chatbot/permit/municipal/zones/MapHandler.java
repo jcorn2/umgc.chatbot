@@ -295,24 +295,5 @@ public class MapHandler {
 
     return null;
   }
-
-
-
-  private static void close(Connection myConn, Statement myStmt, ResultSet myRs)
-      throws SQLException {
-
-    if (myRs != null) {
-      myRs.close();
-    }
-    if (myStmt != null) {
-    }
-    if (myConn != null) {
-      myConn.close();
-    }
-  }
-
-  private void close(Statement myStmt, ResultSet myRs) throws SQLException {
-    close(null, myStmt, myRs);
-  }
 }
 
