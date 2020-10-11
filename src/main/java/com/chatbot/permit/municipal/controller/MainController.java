@@ -16,7 +16,6 @@ import java.util.LinkedHashMap;
 
 @RestController
 public class MainController {
-	
 
 	@Autowired
 	PolygonsRepository polygonsRepository;
@@ -39,7 +38,6 @@ public class MainController {
     LinkedHashMap addressInfo;
     String geocodeQualityCode;
     LinkedHashMap<String, Integer> polygonZoneID = new LinkedHashMap<String, Integer>();
-    System.out.println("hello world");
 
     try {
     	// send request for lat and long values from mapquest api
